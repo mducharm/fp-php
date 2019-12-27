@@ -13,25 +13,40 @@ function partial()
     };
 }
 
-class Identity {
+class Identity
+{
     private $x;
 
-    public function __construct($x) { $this->x = $x; }
-
-    public function emit() { return $this->x; }
-
-    public function chain($fn) { 
-        return $fn($this->x); 
+    public function __construct($x)
+    {
+        $this->x = $x;
     }
 
-    public function map($fn) {
+    public static function of($x)
+    {
+        return new Identity($x);
+    }
+
+    public function emit()
+    {
+        return $this->x;
+    }
+
+    public function inspect()
+    {
+        return "Identity({$this->x})";
+    }
+
+    public function chain($fn)
+    {
+        return $fn($this->x);
+    }
+
+    public function map($fn)
+    {
         return new Identity($fn($this->x));
     }
 
-    public function getNameOfClass()
-    {
-       return static::class;
-    }
 }
 
 ?>
