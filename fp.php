@@ -59,49 +59,20 @@ class Monad
 }
 
 
-class Identity
+class Identity extends Monad
 {
-    private $x;
-
-    public function __construct($x)
-    {
-        $this->x = $x;
-    }
+    protected $x;
 
     public static function of($x)
     {
         return new Identity($x);
     }
-
-    public function emit()
-    {
-        return $this->x;
-    }
-
-    public function inspect()
-    {
-        return "Identity({$this->x})";
-    }
-
-    public function chain($fn)
-    {
-        return $fn($this->x);
-    }
-
-    public function map($fn)
-    {
-        return new Identity($fn($this->x));
-    }
 }
 
-class Collection extends Identity
-{
-    private $x;
 
-    public function __construct($x)
-    {
-        $this->x = $x;
-    }
+class Collection extends Monad
+{
+    protected $x;
 
     public static function of($x)
     {
@@ -114,12 +85,7 @@ class Collection extends Identity
 
     public function inspect()
     {
-        return "Collection({$this->x})";
-    }
-
-    public function map($fn)
-    {
-        return Collection::of($fn($this->x));
+        return get_class($this) . "(" . implode(", ", $this->x) . ")" ;
     }
 
     public function concat($x)
@@ -127,5 +93,6 @@ class Collection extends Identity
         return Collection::of(array_merge($this->x, $x));
     }
 }
+
 
 ?>
