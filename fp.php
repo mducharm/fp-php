@@ -16,8 +16,13 @@ function partial()
 class Monad 
 {
     // Methods that all monads should inherit.
+    public function __construct($x)
+    {
+        $this->x = $x;
+    }
 
-    public function __construct()
+    // Any class extending Monad must implement it's own 'of' method - this method does any type-checking needed and calls the constructor.
+    public static function of($x)
     {
     }
 
@@ -38,7 +43,7 @@ class Monad
 
     public function map($fn)
     {
-        return $this->__construct($fn($this->x));
+        return $this::of($fn($this->x));
     }
 }
 
