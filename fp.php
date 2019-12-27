@@ -13,6 +13,8 @@ function partial()
     };
 }
 
+
+// Inspired by Rob Porter's article: https://dev.to/rgeraldporter/building-expressive-monads-in-javascript-introduction-23b
 class Monad 
 {
     // Methods that all monads should inherit.
@@ -94,5 +96,56 @@ class Collection extends Monad
     }
 }
 
+
+class Maybe extends Monad
+{
+    protected $x;
+
+    public static function of($x)
+    {
+        if (is_null($x) || !isset($x) || $x->isNothing) {
+            return new Nothing();
+        }
+
+        return new Just($x);
+    }
+}
+
+class Just extends Monad
+{
+    protected $x;
+    public $isNothing = false;
+    public $isJust = true;
+
+    public function map($fn)
+    {
+        return Maybe::of($fn($this->x));
+    }
+
+    public function fork($f, $g)
+    {
+        return $g($this->x);
+    }
+}
+
+class Nothing extends Monad
+{
+    public $isNothing = true;
+    public $isJust = false;
+
+    public function __construct()
+    {
+    }
+
+    public function fork($f, $g)
+    {
+        return $f();
+    }
+
+    public function map($fn)
+    {
+        return new Nothing();
+    }
+}
 
 ?>
