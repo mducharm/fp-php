@@ -46,7 +46,40 @@ class Identity
     {
         return new Identity($fn($this->x));
     }
+}
 
+class Collection extends Identity
+{
+    private $x;
+
+    public function __construct($x)
+    {
+        $this->x = $x;
+    }
+
+    public static function of($x)
+    {
+        if (is_array($x)) {
+            return new Collection($x);
+        }
+
+        return new Collection(array($x));
+    }
+
+    public function inspect()
+    {
+        return "Collection({$this->x})";
+    }
+
+    public function map($fn)
+    {
+        return Collection::of($fn($this->x));
+    }
+
+    public function concat($x)
+    {
+        return Collection::of(array_merge($this->x, $x));
+    }
 }
 
 ?>
