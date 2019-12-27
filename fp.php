@@ -45,6 +45,17 @@ class Monad
     {
         return $this::of($fn($this->x));
     }
+
+    // Accepts an array of functions, passing the output of each function as a parameter for the next.
+    public function pipe()
+    {
+        return array_reduce(
+            func_get_args(),
+            fn($carry, $item) => $carry->map($item),
+            $this
+        );
+
+    }
 }
 
 
