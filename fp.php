@@ -13,6 +13,36 @@ function partial()
     };
 }
 
+class Monad 
+{
+    // Methods that all monads should inherit.
+
+    public function __construct()
+    {
+    }
+
+    public function inspect()
+    {
+        return get_class($this) . "({$this->x})";
+    }
+
+    public function emit()
+    {
+        return $this->x;
+    }
+
+    public function chain($fn)
+    {
+        return $fn($this->x);
+    }
+
+    public function map($fn)
+    {
+        return $this->__construct($fn($this->x));
+    }
+}
+
+
 class Identity
 {
     private $x;
