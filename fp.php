@@ -13,6 +13,15 @@ function partial()
     };
 }
 
+function compose(...$funcs)
+{
+    // Combines an arbitrary number of functions into a new function; the output of each function is passed into the next function's parameters
+    return array_reduce(
+        $funcs,
+        fn ($carry, $item) => fn ($x) => $item($carry($x)),
+        fn($x) => $x
+    );
+}
 
 // Inspired by Rob Porter's article: https://dev.to/rgeraldporter/building-expressive-monads-in-javascript-introduction-23b
 class Monad 
